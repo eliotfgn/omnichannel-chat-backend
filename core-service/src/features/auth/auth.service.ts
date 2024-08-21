@@ -7,10 +7,12 @@ class AuthService {
   private readonly userService: UserService = new UserService();
 
   async register(payload: CreateUserDto) {
-    console.log(payload);
     payload.password = await hashPassword(payload.password);
 
-    return this.userService.createUser(payload);
+    const { password, ...userData } =
+      await this.userService.createUser(payload);
+
+    return userData;
   }
 
   async login(payload: { email: string; password: string }) {

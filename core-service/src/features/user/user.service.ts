@@ -5,7 +5,9 @@ import { UserEntity } from './user.entity';
 
 class UserService {
   async createUser(payload: CreateUserDto) {
-    const existingUser = await this.findUserByEmail(payload.email);
+    const existingUser = await prisma.user.findUnique({
+      where: { email: payload.email },
+    });
 
     if (existingUser) {
       throw new HttpException(409, 'Email already exists', 'conflict');

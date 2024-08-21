@@ -7,7 +7,7 @@ export const UserSchema = z.object({
   lastName: z.string(),
   email: z.string().email(),
   password: z.string(),
-  role: z.nativeEnum(Role),
+  role: z.nativeEnum(Role).default('AGENT'),
   chats: z.array(z.string()).optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
