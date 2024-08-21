@@ -13,8 +13,8 @@ class AuthController implements Controller {
   }
 
   private initializeRoutes() {
-    this.router.post('register', this.register);
-    this.router.post('login', this.login);
+    this.router.post('/register', this.register);
+    this.router.post('/login', this.login);
   }
 
   private register = async (
@@ -22,27 +22,35 @@ class AuthController implements Controller {
     res: Response,
     next: NextFunction,
   ) => {
-    const user = await this.authService.register(req.body);
-    res.status(201).json(user);
+    try {
+      const user = await this.authService.register(req.body);
+      res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
   };
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
+    try {
+      const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Basic ')) {
-      return res
-        .status(401)
-        .json({ message: 'Authorization header missing', success: false });
+      if (!authHeader || !authHeader.startsWith('Basic ')) {
+        return res
+          .status(401)
+          .json({ message: 'Authorization header missing', success: false });
+      }
+      const base64Credentials = authHeader.split(' ')[1];
+      const credentials = Buffer.from(base64Credentials, 'base64').toString(
+        'ascii',
+      );
+      const [email, password] = credentials.split(':');
+
+      const data = this.authService.login({ email, password });
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
     }
-    const base64Credentials = authHeader.split(' ')[1];
-    const credentials = Buffer.from(base64Credentials, 'base64').toString(
-      'ascii',
-    );
-    const [email, password] = credentials.split(':');
-
-    const data = this.authService.login({ email, password });
-
-    res.status(200).json(data);
   };
 }
 

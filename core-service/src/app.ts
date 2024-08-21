@@ -24,7 +24,9 @@ class App {
     });
   }
 
-  initializePreRequestMiddlewares() {}
+  initializePreRequestMiddlewares() {
+    this.app.use(express.json());
+  }
 
   initializePostRequestMiddlewares() {
     this.app.use(errorMiddleware);
