@@ -2,6 +2,7 @@
   "name": "core-service",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
@@ -14,7 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.18.0",
+    "@types/argon2": "^0.15.0",
+    "argon2": "^0.40.3",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-winston": "^4.2.0",

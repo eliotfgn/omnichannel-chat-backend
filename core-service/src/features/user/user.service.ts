@@ -31,3 +31,5 @@ class UserService {
     prisma.user.delete({ where: { id } });
   }
 }
+
+export default UserService;
