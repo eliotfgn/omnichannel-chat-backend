@@ -45,7 +45,7 @@ class AuthController implements Controller {
       );
       const [email, password] = credentials.split(':');
 
-      const data = this.authService.login({ email, password });
+      const data = await this.authService.login({ email, password });
 
       res.status(200).json(data);
     } catch (error) {
