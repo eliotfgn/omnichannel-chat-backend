@@ -1,5 +1,5 @@
-import express from "express";
-import logger from '@configs/logger';
+import express from 'express';
+import logger from './configs/logger';
 
 class App {
   private app: express.Application;
