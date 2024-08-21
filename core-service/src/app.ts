@@ -1,6 +1,6 @@
 import express from 'express';
 import logger from './configs/logger';
-import errorMiddleware from '@middlewares/error.middleware';
+import errorMiddleware from './middlewares/error.middleware';
 
 class App {
   private app: express.Application;

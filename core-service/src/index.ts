@@ -1,6 +1,8 @@
 import App from './app';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
-const app: App = new App(+process.env.PORT);
+dotenv.config();
+
+const app: App = new App(Number(process.env.PORT));
 
 app.start();

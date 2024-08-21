@@ -1,5 +1,5 @@
 import { ChatChannel } from '@prisma/client';
-import z from '@configs/zod';
+import z from '../../configs/z';
 
 export const ChatSchema = z.object({
   id: z.string().cuid().optional(),
