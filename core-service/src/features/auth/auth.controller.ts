@@ -4,7 +4,7 @@ import AuthService from './auth.service';
 import { CreateUserDto } from '../user/user.dto';
 
 class AuthController implements Controller {
-  path: string = 'auth';
+  path: string = '/auth';
   router: Router = Router();
   private readonly authService: AuthService = new AuthService();
 
