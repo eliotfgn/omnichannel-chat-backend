@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String   @unique
+  password  String
+  role      Role
+  chats     Chat[]   @relation("UserChats")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  phoneNumber String   @map("phone_number")
+  displayName String   @map("display_name")
+  chats       Chat[]   @relation("CustomerChats")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("customer")
+}
+
+model Chat {
+  id             String      @id @default(cuid())
+  agentId        String      @map("agent_id")
+  agent          User        @relation("UserChats", fields: [agentId], references: [id])
+  customerId     String      @map("customer_id")
+  customer       Customer    @relation("CustomerChats", fields: [customerId], references: [id])
+  closed         Boolean     @default(false)
+  channel        ChatChannel
+  reason         String
+  waitingTime    Int         @default(0) @map("waiting_time")
+  processingTime Int         @default(0) @map("processing_time")
+  duration       Int         @default(0)
+  messages       Message[]
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  @@map("chats")
+}
+
+model Message {
+  id         String            @id @default(cuid())
+  text       String
+  from       String
+  status     MessageStatus
+  type       MessageType
+  authorType MessageAuthorType
+  createdAt  DateTime          @default(now()) @map("created_at")
+  updatedAt  DateTime          @updatedAt @map("updated_at")
+  medias     Media[]
+  Chat       Chat?             @relation(fields: [chatId], references: [id])
+  chatId     String?
+
+  @@map("messages")
+}
+
+model Media {
+  id        String    @id @default(cuid())
+  url       String
+  type      MediaType
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  Message   Message?  @relation(fields: [messageId], references: [id])
+  messageId String?
+
+  @@map("medias")
+}
+
+enum Role {
+  AGENT @map("agent")
+  ADMIN @map("admin")
+}
+
+enum ChatChannel {
+  WHATSAPP  @map("whatsapp")
+  MESSENGER @map("messenger")
+  TELEGRAM  @map("telegram")
+  SMS       @map("sms")
+}
+
+enum MessageStatus {
+  DELIVERED @map("delivered")
+  READ      @map("read")
+}
+
+enum MessageType {
+  TEXT       @map("text")
+  VOICE_NOTE @map("voice_note")
+}
+
+enum MessageAuthorType {
+  CUSTOMER @map("customer")
+  AGENT    @map("agent")
+}
+
+enum MediaType {
+  IMAGE    @map("image")
+  VIDEO    @map("video")
+  DOCUMENT @map("document")
+  AUDIO    @map("audio")
+}
