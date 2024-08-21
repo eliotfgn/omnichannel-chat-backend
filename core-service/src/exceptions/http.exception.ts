@@ -16,6 +16,7 @@ type ErrorType =
   | 'authentication'
   | 'authorization'
   | 'validation'
-  | 'not_found';
+  | 'not_found'
+  | 'conflict';
 
 export default HttpException;
