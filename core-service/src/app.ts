@@ -1,8 +1,9 @@
 import express from "express";
+import logger from '@configs/logger';
 
 class App {
   private app: express.Application;
-  private port: number;
+  private readonly port: number;
 
   constructor(port: number) {
     this.app = express();
@@ -11,7 +12,7 @@ class App {
 
   start = () => {
     this.app.listen(this.port, () => {
-      console.log(`Application started on port ${this.port}.`);
+      logger.info(`Application started on port ${this.port}.`);
     });
   };
 }
